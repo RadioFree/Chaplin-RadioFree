@@ -1,0 +1,88 @@
+        <?php
+
+		$only_content_templates = array( 'template-only-content.php', 'template-full-width-only-content.php' );
+		$show_footer = apply_filters( 'chaplin_show_header_footer_on_only_content_templates', false );
+
+		// Don't output the markup of the footer on the only content templates, unless filtered to do so
+		if ( ! is_page_template( $only_content_templates ) || $show_footer ) : ?>
+		
+			<footer id="site-footer" role="contentinfo">
+
+				<?php if ( is_active_sidebar( 'footer-one' ) || is_active_sidebar( 'footer-two' ) ) : ?>
+
+					<div class="footer-widgets-outer-wrapper border-color-border section-inner">
+					
+						<div class="footer-widgets-wrapper grid tcols-2">
+
+							<?php if ( is_active_sidebar( 'footer-one' ) ) : ?>
+								<div class="footer-widgets column-one grid-item">
+									<?php dynamic_sidebar( 'footer-one' ); ?>
+								</div>
+							<?php endif; ?>
+
+							<?php if ( is_active_sidebar( 'footer-two' ) ) : ?>
+								<div class="footer-widgets column-two grid-item">
+									<?php dynamic_sidebar( 'footer-two' ); ?>
+								</div>
+							<?php endif; ?>
+
+						</div><!-- .footer-widgets-wrapper -->
+						
+					</div><!-- .footer-widgets-outer-wrapper -->
+
+				<?php endif; 
+
+				$has_footer_menu = has_nav_menu( 'footer-menu' );
+
+				$footer_inner_classes = '';
+
+				if ( $has_footer_menu ) {
+					$footer_inner_classes .= ' has-footer-menu';
+				}
+				
+				?>
+
+				<div class="footer-inner section-inner<?php echo esc_attr( $footer_inner_classes ); ?>">
+
+					<?php if ( $has_footer_menu ) : ?>
+
+						<ul class="footer-menu reset-list-style">
+							<?php
+							wp_nav_menu( array(
+								'container' 		=> '',
+								'depth'				=> 1,
+								'items_wrap' 		=> '%3$s',
+								'theme_location' 	=> 'footer-menu',
+							) );
+							?>
+						</ul><!-- .site-nav -->
+
+					<?php endif; ?>
+
+					<div class="footer-credits">
+
+						<p class="footer-copyright"><a target="_blank" href="https://creativecommons.org/licenses/by/2.0/">CC-BY </a> <a href="<?php echo esc_url( home_url() ); ?>" rel="home"><?php echo bloginfo( 'name' ); ?></a>    <a href="https://radiofree.org/feed/"><span class="dashicons dashicons-rss"></span> RSS</a>
+
+</p>
+
+						<p class="theme-credits color-secondary">
+							<a target="_blank" href="https://wordpress.org/"><span class="dashicons dashicons-wordpress-alt"></span></a> <?php
+							/* Translators: $s = name of the theme developer */
+							printf( esc_html_x( 'by %s', 'Translators: $s = name of the theme developer', 'chaplin' ), '<a href="https://www.andersnoren.se">' . esc_html__( 'Anders Nor&eacute;n', 'chaplin' ) . '</a>' ); ?>
+						</p><!-- .theme-credits -->
+
+					</div><!-- .footer-credits -->
+
+				</div><!-- .footer-bottom -->
+
+			</footer><!-- #site-footer -->
+
+			<?php 
+		endif;
+		
+		wp_footer(); 
+		
+		?>
+
+    </body>
+</html>
