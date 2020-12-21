@@ -4,7 +4,9 @@
 	
 	$extra_video = get_post_meta($post->ID, "__cbc_video_url", true); // Plugins Video
 	
-	$audio = get_post_meta($post->ID, "audio_file", true);
+// 	$audio = get_post_meta($post->ID, "audio_file", true);
+	
+	$audio = get_audio_url_for_post($post->ID);
 	
 	if ($audio) $audio = '<audio controls="controls"><source src="'.$audio.'" type="audio/mpeg" /></audio> <script>$("audio").mediaelementplayer();</script>';
 	
@@ -19,7 +21,7 @@
 	$img = get_first_img( $post );
 	$gallery = get_gallery( $post );
 	
-	//$fallback_image_url = chaplin_get_fallback_image_url();
+	$fallback_image_url = chaplin_get_fallback_image_url();
 
 	if ($extra_video=="")
 	{

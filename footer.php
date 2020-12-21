@@ -1,4 +1,58 @@
-        <?php
+           <style>
+	
+	
+	/* ADDING SUPPORT FOR THE NEWSLETTER PLUGIN WIDGET */
+
+.tnp-email::-webkit-input-placeholder::before {
+	content:"Line 1\A";align-content
+	}
+	
+.tnp-email {
+  	top: -0px;
+  position: relative;
+  line-height: 2.0em !important;
+	color: inherit;
+	margin: 0 0 .8rem .8rem;
+	display: flex;
+	justify-content: space-between;
+	width:72% !important;
+	border: 2px;
+	border-color: white;
+}
+.tnp-field label {
+    display: none !important;
+}
+input.tnp-submit { 
+	display: block;
+  top: -40px;
+  position: relative;
+  line-height: 2.0em !important;
+	margin: 0 0 .8rem .8rem;
+	display: flex;
+	justify-content: space-between;
+  width: 26% !important;
+	float: right !important;
+}
+.tnp-field.tnp-field-button {
+  top: -20px !important;
+  position: relative;
+}
+	.tnp-submit {
+background-color: <?php echo get_theme_mod( 'chaplin_buttons_background_color' ); ?> !important;
+	border-color: <?php echo get_theme_mod( 'chaplin_buttons_background_color' ); ?> !important;
+}
+	.tnp-email {
+		color: <?php echo get_theme_mod( 'chaplin_primary_text_color' ); ?> !important;
+background-color: transparent !important;
+	border-color: <?php echo get_theme_mod( 'chaplin_buttons_background_color' ); ?> !important;
+}
+	.tnp-widget input.tnp-submit {
+	color: <?php echo get_theme_mod( 'chaplin_buttons_text_color' ); ?> !important;  
+			   }
+	</style>
+
+
+<?php
 
 		$only_content_templates = array( 'template-only-content.php', 'template-full-width-only-content.php' );
 		$show_footer = apply_filters( 'chaplin_show_header_footer_on_only_content_templates', false );
@@ -58,21 +112,16 @@
 						</ul><!-- .site-nav -->
 
 					<?php endif; ?>
+					<!-- .footer-credits -->
+			
 
-					<div class="footer-credits">
-
-						<p class="footer-copyright"><a target="_blank" href="https://creativecommons.org/licenses/by/2.0/">CC-BY </a> <a href="<?php echo esc_url( home_url() ); ?>" rel="home"><?php echo bloginfo( 'name' ); ?></a>    <a href="https://radiofree.org/feed/"><span class="dashicons dashicons-rss"></span> RSS</a>
-
-</p>
-
-						<p class="theme-credits color-secondary">
-							<a target="_blank" href="https://wordpress.org/"><span class="dashicons dashicons-wordpress-alt"></span></a> <?php
-							/* Translators: $s = name of the theme developer */
-							printf( esc_html_x( 'by %s', 'Translators: $s = name of the theme developer', 'chaplin' ), '<a href="https://www.andersnoren.se">' . esc_html__( 'Anders Nor&eacute;n', 'chaplin' ) . '</a>' ); ?>
-						</p><!-- .theme-credits -->
-
-					</div><!-- .footer-credits -->
-
+				
+								 <?php
+wp_nav_menu( array( 
+    'theme_location' => 'left-footer-menu', 
+    'container_class' => 'left-footer-menu myLinkToTop' ) ); 
+?>
+					
 				</div><!-- .footer-bottom -->
 
 			</footer><!-- #site-footer -->
@@ -83,6 +132,57 @@
 		wp_footer(); 
 		
 		?>
+
+
+
+
+	<script>
+  jQuery(function(){
+   jQuery('li.menu-item-has-children > a:first-child').on('click',function(event){
+    
+    event.preventDefault()
+    jQuery(this).parent().find('ul').toggle(300);
+    //Hide menu when clicked outside
+    jQuery(this).parent().find('ul').onclick(function(){  
+      var thisUI = jQuery(this);
+      jQuery('html').click(function(){
+        thisUI.hide();
+        jQuery('html').unbind('click');
+      });
+    });    
+    
+  });
+  
+});
+  </script>
+
+<script>
+    jQuery('.myLinkToTop').click(function () {
+    jQuery('html, body').animate({scrollTop:jQuery(document).height()}, 'slow');
+    return true;
+});
+jQuery('.myMenuLink').click(function () {
+    jQuery('html, body').animate({scrollTop:0}, 'slow');
+    return true;
+});
+</script>
+<script>
+	jQuery(".header-toggles").on("click",function(){
+  jQuery(".menu-modal.cover-modal").toggleClass("t_menu")  
+})
+
+jQuery(".menu-modal-toggles").on("click",function(){
+  jQuery(".menu-modal.cover-modal").removeClass("t_menu")  
+})
+
+jQuery(".menu-item .sub-menu-toggle").on("click",function(){
+	jQuery(this).toggleClass("active");
+ 
+})
+</script>
+
+
+
 
     </body>
 </html>

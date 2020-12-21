@@ -10,9 +10,9 @@
   gtag('config', 'AW-873421793');
 </script>
 
+<!--<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self';">
+<meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin">-->
 
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src 'self'; script-src 'self'; style-src 'self';">
-<meta http-equiv="Referrer-Policy" content="no-referrer, strict-origin-when-cross-origin">
 
 <main id="site-content" role="main">
 
@@ -68,7 +68,25 @@ if(preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|c
 			.grid-item .preview-title a {
 				text-transform: <?php echo get_theme_mod( 'chaplin_child_ajax_grid_post_headings_letter_case' ); ?>
 			}
-		</style>
+		</style><?php	$youtubevideovar = get_theme_mod( 'rf_youtube_video_homepage'); if (empty($youtubevideovar)) {echo  "";} else {echo '<iframe style="padding-bottom:25px;" width="560" height="315" src="https://www.youtube.com/embed/'.$youtubevideovar.'?rel=0&amp;autoplay=1&mute=1" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';} ?><?php	$facebookvideovar = get_theme_mod( 'rf_facebook_video_homepage'); if (empty($facebookvideovar)) {echo  "";} else {echo '<iframe style="padding-bottom:25px;" src="https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2Fstr34mtv%2Fvideos%2F'.$facebookvideovar.'%2F&width=900" width="1280" height="720" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true" data-autoplay=”true”></iframe>';} ?><?php	$homepageurl = get_home_url();
+$homepageurl = preg_replace('#^https?://#', '', $homepageurl);$twitchvideovar = get_theme_mod( 'rf_twitch_video_homepage'); if (empty($twitchvideovar)) {echo  "";} else {echo '<iframe style="padding-bottom:25px;" src="https://player.twitch.tv/?video='.$twitchvideovar.'&parent='.$homepageurl.'" frameborder="0" allowfullscreen="true" scrolling="no" height="378" width="620"></iframe>
+';} 
+		
+		
+		 if ( !function_exists('dynamic_sidebar') || !dynamic_sidebar("Grid Page Header Under Video") ) :
+endif;
+		
+		
+		
+		
+		
+		?>
+		
+		
+		
+		
+		
+		
 		<?php if ( have_posts() ) : 
 
 			$post_grid_column_classes = chaplin_get_post_grid_column_classes();

@@ -227,3 +227,254 @@ wp_enqueue_style( 'dashicons' );
 }
 
 
+/* Add audio url in REST API response as media_url  */
+
+add_action( 'rest_api_init', 'create_api_posts_audio_url' );
+ 
+function create_api_posts_audio_url() {
+    register_rest_field( 'post', 'media_url', array(
+           'get_callback'    => 'get_post_audio_url_api',
+           'schema'          => null,
+        )
+    );
+}
+ 
+function get_post_audio_url_api( $object ) {
+    $post_id = $object['id'];
+	
+	return get_audio_url_for_post($post_id);
+	
+}
+
+
+
+function get_audio_url_for_post($post_id){
+	
+	$audio_url = get_post_meta($post_id, "audio_file_url", true);
+	
+	if(!$audio_url){
+		
+		$audio_url = get_post_meta($post_id, "audio_file", true);
+		
+		if(!$audio_url){
+			$temp_ = get_post_meta($post_id, "enclosure", true);
+			if($temp_){
+				$audio_url = explode("\n",$temp_)[0];
+			}
+		}
+		
+	}
+	
+  	return $audio_url;
+}
+
+
+
+ add_filter( 'post_row_actions', 'ioi_test_action', 10, 2 );
+
+ function ioi_test_action( $actions, $post ){
+	 if ( get_post_type($post) === 'wprss_feed' ) {
+		 $actions['duplicate'] = '<a href="#" onclick="javascript:alert(\'Coming Soon\');return false;">Duplicate</a>';
+	 }
+	 return $actions;
+ }
+
+
+
+if ( function_exists('register_sidebar') )
+  register_sidebar(array(
+    'name' => 'Podcast Footer',
+    'before_widget' => '<div class = "jetpack-podcast-player">',
+    'after_widget' => '</div>',
+    'before_title' => '<h3>',
+    'after_title' => '</h3>',
+  )
+);
+
+if ( function_exists('register_sidebar') )
+  register_sidebar(array(
+    'name' => 'Grid Page Header Under Video',
+    'before_widget' => '<div class = "jetpack-podcast-player">',
+    'after_widget' => '</div>',
+    'before_title' => '<h3>',
+    'after_title' => '</h3>',
+  )
+);
+
+
+add_action( 'init', 'register_my_menus' );
+
+function register_my_menu() {
+register_nav_menu('top-menu', __('Top Menu') );
+}
+add_action( 'init', 'register_my_menu' );
+
+function wpb_widgets_init() {
+
+	register_sidebar( array(
+		'name'          => 'header menu Area',
+		'id'            => 'header-menu-widget',
+		'before_widget' => '<div class="header_area">',
+		'after_widget'  => '</div>',
+		'before_title'  => '<h2 class="chw-title">',
+		'after_title'   => '</h2>',
+	) );
+
+}
+
+
+
+
+
+
+/*RF SEO Customizer Code HERE*/
+add_action('customize_register', 'theme_footer_customizer');
+function theme_footer_customizer($wp_customize){
+ //adding section in wordpress customizer   
+$wp_customize->add_section('rf_seo_settings_section', array(
+  'title'          => 'SEO Section'
+ ));
+//adding setting for footer text area
+$wp_customize->add_setting('text_setting', array(
+ 'default'        => 'Independent Media for People, Not Profits.',
+ ));
+
+	
+	
+	//adding setting for footer text area
+$wp_customize->add_setting('og_description_setting', array(
+ 'default'        => 'Independent Media for People, Not Profits.',
+ ));
+$wp_customize->add_control('og_description_setting', array(
+ 'label'   => 'OG META Description',
+  'section' => 'rf_seo_settings_section',
+ 'type'    => 'textarea',
+));
+	
+	
+	$wp_customize->add_setting('og_title_setting', array(
+ 'default'        => 'Radio Free',
+ ));
+$wp_customize->add_control('og_title_setting', array(
+ 'label'   => 'OG META Site Title',
+  'section' => 'rf_seo_settings_section',
+ 'type'    => 'text',
+));
+	
+		$wp_customize->add_setting('og_sitename_setting', array(
+ 'default'        => 'Radio Free',
+ ));
+$wp_customize->add_control('og_sitename_setting', array(
+ 'label'   => 'OG META Site Name',
+  'section' => 'rf_seo_settings_section',
+ 'type'    => 'text',
+));
+	
+	
+	$wp_customize->add_setting('og_twitter_setting', array(
+ 'default'        => 'radiofreeorg',
+ ));
+$wp_customize->add_control('og_twitter_setting', array(
+ 'label'   => 'OG META Twitter @ Handle',
+  'section' => 'rf_seo_settings_section',
+ 'type'    => 'text',
+));	
+
+		
+	$wp_customize->add_setting('og_featured_image_setting', array(
+ 'default'        => 'http://www.radiofree.org/wp-content/uploads/2020/10/rf-radiofree.png',
+ ));
+$wp_customize->add_control('og_featured_image_setting', array(
+ 'label'   => 'OG META Image Link',
+  'section' => 'rf_seo_settings_section',
+ 'type'    => 'text',
+));	
+	
+
+
+	//adding setting for footer text area
+$wp_customize->add_setting('og_keywords_setting', array(
+ 'default'        => 'radio free, news, daily news, breaking news, news today, current events, radiofree, progressive, independent, journalism',
+ ));
+$wp_customize->add_control('og_keywords_setting', array(
+ 'label'   => 'OG META Keywords',
+  'section' => 'rf_seo_settings_section',
+ 'type'    => 'textarea',
+));
+
+
+
+
+
+}
+
+
+
+add_action( 'widgets_init', 'wpb_widgets_init' );
+
+function pinkstone_remove_jetpack() {
+	if( class_exists( 'Jetpack' ) && !current_user_can( 'manage_options' ) ) {
+		remove_menu_page( 'jetpack' );
+	}
+}
+/* Hides the Jetpack section from non admin users  */
+
+add_action( 'admin_init', 'pinkstone_remove_jetpack' );
+add_action( 'wp_head', function () { ?>
+<script>
+	jQuery.fn.extend({
+    live: function (event, callback) {
+       if (this.selector) {
+            jQuery(document).on(event, this.selector, callback);
+        }
+        return this;
+    }
+});
+</script>
+
+<?php } );
+
+function wpb_custom_new_menu() {
+  register_nav_menu('left-footer-menu',__( 'Left Footer Menu' ));
+}
+add_action( 'init', 'wpb_custom_new_menu' );
+
+
+/*RF Homepage Video Section Customizer Code HERE*/
+add_action('customize_register', 'rf_homepage_video_customizer');
+function rf_homepage_video_customizer($wp_customize){
+ //adding section in wordpress customizer   
+$wp_customize->add_section('rf_homepage_videos_section', array(
+  'title'          => 'Homepage Videos Section'
+ ));
+
+	//adding setting for homepage videos on WP-Customizer
+$wp_customize->add_setting('rf_youtube_video_homepage', array(
+ 'default'        => '',
+ ));
+$wp_customize->add_control('rf_youtube_video_homepage', array(
+ 'label'   => 'Youtube Video ID',
+  'section' => 'rf_homepage_videos_section',
+ 'type'    => 'text',
+));
+	
+	//adding setting for homepage videos on WP-Customizer
+$wp_customize->add_setting('rf_twitch_video_homepage', array(
+ 'default'        => '',
+ ));
+$wp_customize->add_control('rf_twitch_video_homepage', array(
+ 'label'   => 'Twitch Video ID',
+  'section' => 'rf_homepage_videos_section',
+ 'type'    => 'text',
+));
+	
+	$wp_customize->add_setting('rf_facebook_video_homepage', array(
+ 'default'        => '',
+ ));
+$wp_customize->add_control('rf_facebook_video_homepage', array(
+ 'label'   => 'Facebook Video ID',
+  'section' => 'rf_homepage_videos_section',
+ 'type'    => 'text',
+));
+
+}
